@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PasswordResetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +15,30 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+//Auth module
+Route::group([
+	'prefix'=>'auth'
+],function()
+{
+	Route::post('login',  [AuthController::class,'login']);
+	Route::post('signup', [AuthController::class,'signUp']);
+	Route::get('signup/activate/{token}', [AuthController::class,'confirmEmail']);
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+	//token is required to access the routes below
+	Route::group([
+		'middleware'=>'auth:api'
+	],function()
+	{
+		Route::get('logout',  [AuthController::class,'logout']);
+		Route::get('user',  [AuthController::class,'user']);
+	});
+});
+
+//Reset password module
+Route::group([   
+    'prefix' => 'password'
+], function () {    
+    Route::post('create', [PasswordResetController::class,'create']);
+    Route::get('find/{token}', [PasswordResetController::class,'find']);
+    Route::post('reset', [PasswordResetController::class,'reset']);
 });
