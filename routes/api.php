@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PasswordResetController;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -26,19 +27,36 @@ Route::group([
 
 	//token is required to access the routes below
 	Route::group([
-		'middleware'=>'auth:api'
+		'middleware'=>'auth:api',
+		//'middleware'=>'user.type:empleado'
 	],function()
 	{
 		Route::get('logout',  [AuthController::class,'logout']);
 		Route::get('user',  [AuthController::class,'user']);
+
+		Route::group([
+			'middleware'=>'auth:api',
+		'middleware'=>'user.type:administrador'
+		],function()
+		{
+			//Admin routes
+		});
+
+		Route::group([
+			'middleware'=>'auth:api',
+		'middleware'=>'user.type:empleado'
+		],function()
+		{
+			//Employee routes
+		});
 	});
 });
 
 //Reset password module
 Route::group([   
-    'prefix' => 'password'
+	'prefix' => 'password'
 ], function () {    
-    Route::post('create', [PasswordResetController::class,'create']);
-    Route::get('find/{token}', [PasswordResetController::class,'find']);
-    Route::post('reset', [PasswordResetController::class,'reset']);
+	Route::post('create', [PasswordResetController::class,'create']);
+	Route::get('find/{token}', [PasswordResetController::class,'find']);
+	Route::post('reset', [PasswordResetController::class,'reset']);
 });

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\ConfirmationMail;
 //To generate activation_token
 use Illuminate\Support\Str;
+use JWTAuth;
 
 class AuthController extends Controller
 {
@@ -23,6 +24,7 @@ class AuthController extends Controller
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => bcrypt($request->password),
+            'type'     => User::ROLES['employee'],
             'activation_token'  => Str::random(60)
         ]);
         Mail::to($request->email)->send(new ConfirmationMail($user));
@@ -38,23 +40,13 @@ class AuthController extends Controller
 
         $credentials = request(['email', 'password']);
 
-        if (!Auth::attempt($credentials))
+        if (!$token = JWTAuth::attempt($credentials))
             return response()->json([
                 'message' => 'Credenciales incorrectas'
             ], 401);
 
-        $user = $request->user();
-        $tokenResult = $user->createToken('Personal Access Token');
-
-        $token = $tokenResult->token;
-        if ($request->remember_me)
-            $token->expires_at = Carbon::now()->addWeeks(1);
-        $token->save();
-
         return response()->json([
-            'access_token' => $tokenResult->accessToken,
-            'token_type' => 'Bearer',
-            'expires_at' => Carbon::parse($token->expires_at)->toDateTimeString()
+            'token' => $token
         ]);
     }
 
