@@ -24,7 +24,7 @@ class AuthController extends Controller
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => bcrypt($request->password),
-            'type'     => User::ROLES['employee'],
+            'type'     => 2,
             'activation_token'  => Str::random(60)
         ]);
         Mail::to($request->email)->send(new ConfirmationMail($user));

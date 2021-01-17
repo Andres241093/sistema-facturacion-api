@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use App\Models\BillModel as Bills;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -45,13 +46,23 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
+    public const ROLES = [
+        1 => 'administrador',
+        2 => 'empleado'
+    ];
+
+    public function bills()
+    {
+        $this->hasMany(Bills::class);
+    }
+
      /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed
      */
-    public function getJWTIdentifier()
-    {
+     public function getJWTIdentifier()
+     {
         return $this->getKey();
     }
 
@@ -64,9 +75,4 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
-
-    public const ROLES = [
-        1 => 'administrador',
-        2 => 'empleado'
-    ];
 }

@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\CategoryController;
 
 
 /*
@@ -27,36 +28,43 @@ Route::group([
 
 	//token is required to access the routes below
 	Route::group([
-		'middleware'=>'auth:api',
-		//'middleware'=>'user.type:empleado'
+		'middleware'=>'auth:api'
 	],function()
 	{
 		Route::get('logout',  [AuthController::class,'logout']);
 		Route::get('user',  [AuthController::class,'user']);
-
-		Route::group([
-			'middleware'=>'auth:api',
-		'middleware'=>'user.type:administrador'
-		],function()
-		{
-			//Admin routes
-		});
-
-		Route::group([
-			'middleware'=>'auth:api',
-		'middleware'=>'user.type:empleado'
-		],function()
-		{
-			//Employee routes
-		});
 	});
 });
 
+Route::middleware([
+	'check-jwt'
+])->group(
+	function()
+	{
 //Reset password module
-Route::group([   
-	'prefix' => 'password'
-], function () {    
-	Route::post('create', [PasswordResetController::class,'create']);
-	Route::get('find/{token}', [PasswordResetController::class,'find']);
-	Route::post('reset', [PasswordResetController::class,'reset']);
-});
+		Route::group([   
+			'prefix' => 'password'
+		], function () {    
+			Route::post('create', [PasswordResetController::class,'create']);
+			Route::get('find/{token}', [PasswordResetController::class,'find']);
+			Route::post('reset', [PasswordResetController::class,'reset']);
+		});
+
+//Admin routes
+		Route::group([
+			'middleware'=>'user.type:administrador'
+		],function()
+		{
+
+			Route::resource('category',CategoryController::class);
+		});
+
+//Employee routes
+		Route::group([
+			'middleware'=>'auth:api',
+			'middleware'=>'user.type:empleado'
+		],function()
+		{
+
+		});
+	});
