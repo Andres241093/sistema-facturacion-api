@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\CategoryModel as Category;
 use App\Http\Requests\CategoryRequest;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
@@ -15,9 +16,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-       $categories = Category::all();
-
-       return response()->json($categories);
+       $categories = DB::table('categories');
+       $filters = ['name','surname'];
+       return $this->response($categories,$filters);
     }
 
     /**
@@ -48,7 +49,10 @@ class CategoryController extends Controller
     public function show($id)
     {
         $category = Category::where('id',$id)->first();
-        return response()->json($category);
+        return $this->checkIfExist(
+            $category,
+            'La categoría solicitada no existe'
+        );
     }
 
     /**
@@ -64,9 +68,12 @@ class CategoryController extends Controller
         ->update([
             'name' => $request->name
         ]);
-        return response()->json([
-            'message' => 'Categoria modificada exitosamente'
-        ],201);
+
+        return $this->checkIfExistOrUpdate(
+            $category,
+            'La categoría solicitada no existe',
+            'Categoría modificada exitosamente'
+        );
     }
 
     /**
@@ -78,10 +85,11 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category = Category::find($id);
-        $category->delete();
 
-        return response()->json([
-            'message' => 'Categoria eliminada exitosamente'
-        ],201);
+         return $this->checkIfExistOrDelete(
+            $category,
+            'La categoría solicitada no existe',
+            'Categoría eliminada exitosamente'
+        );
     }
 }

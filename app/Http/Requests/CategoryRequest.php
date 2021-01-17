@@ -24,12 +24,13 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string'
+            'name' => 'required|string|unique:categories'
         ];
     }
     public function messages()
     {
         return [
+            'name.unique' => 'La categoría ya existe',
             'name.required' => 'El nombre es requerido',
             'name.string' => 'El nombre debe ser un campo de tipo texto'
         ];  
