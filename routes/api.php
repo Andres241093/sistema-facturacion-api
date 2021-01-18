@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\EmployeeController;
 
 
 /*
@@ -57,6 +59,8 @@ Route::middleware([
 		{
 
 			Route::resource('category',CategoryController::class);
+			Route::resource('admin',AdminController::class);
+			Route::resource('employee',AdminController::class);
 		});
 
 //Employee routes

@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
+    protected $created = 'Categoria creada exitosamente';
+    protected $updated = 'Categoría modificada exitosamente';
+    protected $deleted = 'Categoría eliminada exitosamente';
+    protected $not_found = 'La categoría solicitada no existe';
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +21,7 @@ class CategoryController extends Controller
     public function index()
     {
        $categories = DB::table('categories');
-       $filters = ['name','surname'];
+       $filters = ['name'];
        return $this->response($categories,$filters);
     }
 
@@ -36,7 +40,7 @@ class CategoryController extends Controller
         $category->save();
 
         return response()->json([
-            'message' => 'Categoria creada exitosamente'
+            'message' => $this->created
         ],201);
     }
 
@@ -51,7 +55,7 @@ class CategoryController extends Controller
         $category = Category::where('id',$id)->first();
         return $this->checkIfExist(
             $category,
-            'La categoría solicitada no existe'
+            $this->not_found
         );
     }
 
@@ -62,7 +66,7 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryRequest $request, $id)
     {
         $category = Category::where('id',$id)
         ->update([
@@ -71,8 +75,8 @@ class CategoryController extends Controller
 
         return $this->checkIfExistOrUpdate(
             $category,
-            'La categoría solicitada no existe',
-            'Categoría modificada exitosamente'
+            $this->not_found,
+            $this->updated
         );
     }
 
@@ -88,8 +92,8 @@ class CategoryController extends Controller
 
          return $this->checkIfExistOrDelete(
             $category,
-            'La categoría solicitada no existe',
-            'Categoría eliminada exitosamente'
+            $this->not_found,
+            $this->deleted
         );
     }
 }

@@ -28,6 +28,23 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     /**
+     * The attributes that should be visible in arrays.
+     *
+     * @var array
+     */
+    protected $visible = [
+        'id',
+        'name',
+        'email',
+        'type',
+        'active',
+        'activation_token',
+        'email_verified_at',
+        'created_at',
+        'updated_at'
+    ];
+
+    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array

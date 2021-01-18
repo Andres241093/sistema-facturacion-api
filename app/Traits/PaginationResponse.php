@@ -21,7 +21,7 @@ trait PaginationResponse
 		if(count($filters)>0)
 		{
 			foreach ($filters as $key => $value) {
-				$query = $model_query->where($key,'LIKE',$value.'%');
+				$query = $model_query->where($key,'LIKE','%'.$value.'%');
 			}
 		}else{
 			$query = $model_query;
