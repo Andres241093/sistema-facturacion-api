@@ -60,7 +60,7 @@ Route::middleware([
 
 			Route::resource('category',CategoryController::class);
 			Route::resource('admin',AdminController::class);
-			Route::resource('employee',AdminController::class);
+			Route::resource('employee',EmployeeController::class);
 		});
 
 //Employee routes

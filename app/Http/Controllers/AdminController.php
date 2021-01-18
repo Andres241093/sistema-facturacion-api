@@ -27,7 +27,8 @@ class AdminController extends Controller
     public function index()
     {
        $users = DB::table('users')
-       ->select($this->visible_attributes);
+       ->select($this->visible_attributes)
+       ->where('type', '=', 1);
        $filters = ['name','email','active'];
        return $this->response($users,$filters);
     }
@@ -63,7 +64,7 @@ class AdminController extends Controller
      */
     public function show($id)
     {
-        $user = User::where('id',$id)->first();
+        $user = User::where('id',$id)->where('type', 1)->first();
         return $this->checkIfExist(
             $user,
             $this->not_found
@@ -77,7 +78,7 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserRequest $request, $id)
+    public function update(Request $request, $id)
     {
         $user = User::where('id',$id)
         ->update([
