@@ -16,6 +16,6 @@ class CategoryModel extends Model
 
 	public function products()
 	{
-		$this->hasMany(Products::class);
+		return $this->hasMany(Products::class);
 	}
 }

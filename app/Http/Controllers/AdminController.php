@@ -81,6 +81,7 @@ class AdminController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::where('id',$id)
+        ->where('type', 1)
         ->update([
             'name'     => $request->name,
             'email'    => $request->email,

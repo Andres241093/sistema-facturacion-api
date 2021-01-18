@@ -15,13 +15,22 @@ class ProductModel extends Model
 
 	protected $fillable = ['description','price','id_category'];
 
+	protected $visible = [
+		'id',
+		'description',
+		'price',
+		'created_at',
+        'updated_at',
+		'category'
+	];
+
 	public function category()
 	{
-		$this->belongsTo(Category::class);
+		return $this->belongsTo(Category::class,'id_category');
 	}
 
 	public function billProduct()
 	{
-		$this->hasMany(BillProduct::class);
+		return $this->hasMany(BillProduct::class);
 	}
 }

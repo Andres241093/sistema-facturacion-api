@@ -7,6 +7,7 @@ use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ProductController;
 
 
 /*
@@ -61,6 +62,7 @@ Route::middleware([
 			Route::resource('category',CategoryController::class);
 			Route::resource('admin',AdminController::class);
 			Route::resource('employee',EmployeeController::class);
+			Route::resource('product',ProductController::class);
 		});
 
 //Employee routes
