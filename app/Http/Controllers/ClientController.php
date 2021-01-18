@@ -103,7 +103,8 @@ class ClientController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::find($id);
+        $user = User::where('id',$id)
+        ->where('type', 3)->first();
 
          return $this->checkIfExistOrDelete(
             $user,

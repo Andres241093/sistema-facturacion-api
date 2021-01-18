@@ -104,7 +104,8 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::find($id);
+        $user = User::where('id',$id)
+        ->where('type', 2)->first();
 
          return $this->checkIfExistOrDelete(
             $user,

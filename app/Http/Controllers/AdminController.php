@@ -103,7 +103,8 @@ class AdminController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::find($id);
+        $user = User::where('id',$id)
+        ->where('type', 1)->first();
 
          return $this->checkIfExistOrDelete(
             $user,
