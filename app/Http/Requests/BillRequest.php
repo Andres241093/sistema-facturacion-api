@@ -13,7 +13,7 @@ class BillRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,22 @@ class BillRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "id_user"=>  "required|integer",
+            "total"=>  "required|integer",
+            "date"=>  "required|date",
+            "products"=>  "required"
         ];
+    }
+    public function messages()
+    {
+        return [
+            'id_user.integer' => 'El id de usuario debe ser un número entero',
+            'id_user.required' => 'El usuario es requerido',
+            'total.required' => 'El total es requerido',
+            'total.integer' => 'El total debe ser de tipo entero',
+            "date.required"=>  "La fecha es requerida",
+            "date.date"=>  "Formato de fecha inválido",
+            "products.required"=>  "Los productos son requeridos"
+        ];  
     }
 }

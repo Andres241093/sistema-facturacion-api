@@ -22,6 +22,6 @@ class BillModel extends Model
 
     public function billProduct()
     {
-        return $this->hasMany(BillProduct::class);
+        return $this->hasMany(BillProduct::class,'id_bill');
     }
 }

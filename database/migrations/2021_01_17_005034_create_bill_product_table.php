@@ -15,15 +15,14 @@ class CreateBillProductTable extends Migration
     {
         Schema::create('bill_product', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('id_product')->unsigned();
             $table->bigInteger('id_bill')->unsigned();
+            $table->string('description');
+            $table->integer('price');
+            $table->string('category');
+            $table->integer('quantity');
+            $table->integer('total');
             $table->timestamps();
 
-            $table->foreign('id_product')
-            ->references('id')
-            ->on('products')
-            ->onUpdate('cascade')
-            ->onDelete('cascade');
 
             $table->foreign('id_bill')
             ->references('id')

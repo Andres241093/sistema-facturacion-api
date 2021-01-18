@@ -13,12 +13,14 @@ class BillProductModel extends Model
 
 	protected $table = 'bill_product';
 
+	protected $fillable = ['id_product','id_bill','quantity','total'];
+
 	public function product()
 	{
-		return $this->belongsTo(Product::class);
+		return $this->belongsTo(Product::class,'id_product');
 	}
 	public function bill()
 	{
-		return $this->belongsTo(Bill::class);
+		return $this->belongsTo(Bill::class,'id_bill');
 	}
 }

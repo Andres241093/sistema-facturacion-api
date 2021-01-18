@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\BillController;
 
 
 /*
@@ -63,6 +64,7 @@ Route::middleware([
 			Route::resource('admin',AdminController::class);
 			Route::resource('employee',EmployeeController::class);
 			Route::resource('product',ProductController::class);
+			Route::resource('bill',BillController::class);
 		});
 
 //Employee routes
