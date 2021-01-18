@@ -45,7 +45,7 @@ class UserSeeder extends Seeder
 	        $user = new User([
 	            "name"     => $value["name"],
 	            "email"    => $value["email"],
-	            "password" => $value["password"],
+	            "password" => bcrypt($value["password"]),
 	            "type"     => $value["type"],
 	            "activation_token"     => 123456789,
 	            "active"  => 1

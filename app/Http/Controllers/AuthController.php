@@ -24,14 +24,14 @@ class AuthController extends Controller
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => bcrypt($request->password),
-            'type'     => 2,
+            'type'     => 3,
             'activation_token'  => Str::random(60)
         ]);
         Mail::to($request->email)->send(new ConfirmationMail($user));
         $user->save();
 
         return response()->json([
-            'message' => 'Usuario creado exitosamente'
+            'message' => 'Cliente creado exitosamente'
         ], 201);
     }
 

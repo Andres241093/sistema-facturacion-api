@@ -13,7 +13,14 @@ class BillProductModel extends Model
 
 	protected $table = 'bill_product';
 
-	protected $fillable = ['id_product','id_bill','quantity','total'];
+	protected $fillable = [
+		'id_bill',
+		'product_description',
+		'product_category',
+		'product_price',
+		'quantity',
+		'total'
+	];
 
 	public function product()
 	{

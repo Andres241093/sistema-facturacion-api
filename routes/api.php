@@ -7,6 +7,7 @@ use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BillController;
 
@@ -45,7 +46,7 @@ Route::middleware([
 ])->group(
 	function()
 	{
-//Reset password module
+		//Reset password module
 		Route::group([   
 			'prefix' => 'password'
 		], function () {    
@@ -54,7 +55,7 @@ Route::middleware([
 			Route::post('reset', [PasswordResetController::class,'reset']);
 		});
 
-//Admin routes
+		//Admin routes
 		Route::group([
 			'middleware'=>'user.type:administrador'
 		],function()
@@ -63,16 +64,31 @@ Route::middleware([
 			Route::resource('category',CategoryController::class);
 			Route::resource('admin',AdminController::class);
 			Route::resource('employee',EmployeeController::class);
+			Route::resource('client',ClientController::class);
 			Route::resource('product',ProductController::class);
 			Route::resource('bill',BillController::class);
 		});
 
-//Employee routes
+		//Employee routes
 		Route::group([
 			'middleware'=>'auth:api',
-			'middleware'=>'user.type:empleado'
+			'middleware'=>'user.type:empleado,administrador'
 		],function()
 		{
+			Route::resource('product',ProductController::class)
+			->only(['index','show']);
+			Route::resource('bill',BillController::class);
+		});
 
+		//Client routes
+		Route::group([
+			'middleware'=>'auth:api',
+			'middleware'=>'user.type:cliente,empleado,administrador'
+		],function()
+		{
+			Route::resource('product',ProductController::class)
+			->only(['index','show']);
+			Route::resource('bill',BillController::class)
+			->only(['index','show']);
 		});
 	});
