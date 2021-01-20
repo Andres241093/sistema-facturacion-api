@@ -3,14 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Http\Requests\UserRequest;
+use App\Models\ClientModel as Client;
+use App\Http\Requests\ClientRequest;
 use Illuminate\Support\Facades\DB;
-//Mail
-use Illuminate\Support\Facades\Mail;
-use App\Mail\ConfirmationMail;
-//To generate activation_token
-use Illuminate\Support\Str;
 
 class ClientController extends Controller
 {    
@@ -18,7 +13,6 @@ class ClientController extends Controller
     protected $updated = 'Cliente modificado exitosamente';
     protected $deleted = 'Cliente eliminado exitosamente';
     protected $not_found = 'El cliente solicitado no existe';
-    protected $visible_attributes = ['id','name','email','type','active','activation_token','email_verified_at','created_at','updated_at'];
     /**
      * Display a listing of the resource.
      *
@@ -26,11 +20,9 @@ class ClientController extends Controller
      */
     public function index()
     {
-       $users = DB::table('users')
-       ->select($this->visible_attributes)
-       ->where('type', '=', 3);
-       $filters = ['name','email','active'];
-       return $this->response($users,$filters);
+       $clients = DB::table('clients');
+       $filters = ['name','dni'];
+       return $this->response($clients,$filters);
     }
 
     /**
@@ -39,17 +31,15 @@ class ClientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $request)
+    public function store(ClientRequest $request)
     {
-        $user = new User([
+        $client = new Client([
             'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => bcrypt($request->password),
-            'type'     => 3,
-            'activation_token'  => Str::random(60)
+            'dni'     => $request->dni,
+            'address'     => $request->address,
+            'phone'     => $request->phone
         ]);
-        $user->save();
-        Mail::to($request->email)->send(new ConfirmationMail($user));
+        $client->save();
 
         return response()->json([
             'message' => $this->created
@@ -64,9 +54,9 @@ class ClientController extends Controller
      */
     public function show($id)
     {
-        $user = User::where('id',$id)->where('type', 3)->first();
+        $client = Client::where('id',$id)->first();
         return $this->checkIfExist(
-            $user,
+            $client,
             $this->not_found
         );
     }
@@ -80,16 +70,16 @@ class ClientController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::where('id',$id)
-        ->where('type', 3)
+        $client = Client::where('id',$id)
         ->update([
             'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => bcrypt($request->password)
+            'dni'     => $request->dni,
+            'address'     => $request->address,
+            'phone'     => $request->phone
         ]);
 
         return $this->checkIfExistOrUpdate(
-            $user,
+            $client,
             $this->not_found,
             $this->updated
         );
@@ -103,11 +93,10 @@ class ClientController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::where('id',$id)
-        ->where('type', 3)->first();
+        $client = Client::where('id',$id)->first();
 
          return $this->checkIfExistOrDelete(
-            $user,
+            $client,
             $this->not_found,
             $this->deleted
         );

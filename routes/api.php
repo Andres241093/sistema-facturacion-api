@@ -79,16 +79,4 @@ Route::middleware([
 			->only(['index','show']);
 			Route::resource('bill',BillController::class);
 		});
-
-		//Client routes
-		Route::group([
-			'middleware'=>'auth:api',
-			'middleware'=>'user.type:cliente,empleado,administrador'
-		],function()
-		{
-			Route::resource('product',ProductController::class)
-			->only(['index','show']);
-			Route::resource('bill',BillController::class)
-			->only(['index','show']);
-		});
 	});

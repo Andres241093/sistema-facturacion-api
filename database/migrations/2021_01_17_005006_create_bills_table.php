@@ -16,6 +16,7 @@ class CreateBillsTable extends Migration
         Schema::create('bills', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('id_user')->unsigned();
+            $table->bigInteger('id_client')->unsigned();
             $table->float('total');
             $table->date('date');
             $table->timestamps();
@@ -23,6 +24,12 @@ class CreateBillsTable extends Migration
             $table->foreign('id_user')
             ->references('id')
             ->on('users')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
+
+            $table->foreign('id_client')
+            ->references('id')
+            ->on('clients')
             ->onUpdate('cascade')
             ->onDelete('cascade');
         });

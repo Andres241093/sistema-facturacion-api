@@ -23,7 +23,7 @@ class BillController extends Controller
      */
     public function index()
     {
-    	$bills = Bill::with(['user','billProduct']);
+    	$bills = Bill::with(['user','client','billProduct']);
     	$filters = ['description','price','id_category'];
     	return $this->response($bills,$filters);
     }
@@ -37,6 +37,7 @@ class BillController extends Controller
     public function store(BillRequest $request)
     {
     	$user = User::where('id',$request->id_user)->first();
+        $client = User::where('id',$request->id_client)->first();
     	$null_products = [];
     	foreach ($request->products as $key => $value) {
     		$product = Product::where('id',$value['id'])->first();
@@ -46,14 +47,15 @@ class BillController extends Controller
     		}
     	}
 
-    	if($user != NULL)
+    	if($user != NULL && $client !=NULL)
     	{
     		if(!count($null_products)>0)
     		{
     			$bill = new Bill([
                     'date'     => $request->date,
                     'total'    => $request->total,
-                    'id_user' => $request->id_user
+                    'id_user' => $request->id_user,
+                    'id_client' => $request->id_client
                 ]);
 
              $bill->save();
@@ -83,7 +85,7 @@ class BillController extends Controller
 
  }else{
   return response()->json([
-     'message' => 'El usuario solicitado no existe'
+     'message' => 'El usuario o cliente solicitado no existe'
  ],404);
 }
 }
@@ -128,6 +130,7 @@ class BillController extends Controller
             $delete_products->delete();
 
             $user = User::where('id',$request->id_user)->first();
+            $client = User::where('id',$request->id_client)->first();
             $null_products = [];
             foreach ($request->products as $key => $value) {
                 var_dump($value['id']);
@@ -138,7 +141,7 @@ class BillController extends Controller
              }
          }
 
-        if($user != NULL)
+        if($user != NULL && $client != NULL)
         {
             if(!count($null_products)>0)
             {
@@ -146,7 +149,8 @@ class BillController extends Controller
                  ->update([
                     'date'     => $request->date,
                     'total'    => $request->total,
-                    'id_user' => $request->id_user
+                    'id_user' => $request->id_user,
+                    'id_client' => $request->id_client
                 ]);
 
 
@@ -174,7 +178,7 @@ class BillController extends Controller
 
         }else{
           return response()->json([
-             'message' => 'El usuario solicitado no existe'
+             'message' => 'El usuario o cliente solicitado no existe'
          ],404);
         }
 

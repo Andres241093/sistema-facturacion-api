@@ -65,8 +65,7 @@ class User extends Authenticatable implements JWTSubject
 
     public const ROLES = [
         1 => 'administrador',
-        2 => 'empleado',
-        3 => 'cliente'
+        2 => 'empleado'
     ];
 
     public function bills()
